@@ -17,9 +17,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var retry_button : Button
     lateinit var click_count : TextView
     lateinit var you_win : TextView
-    lateinit var gridBox : ConstraintLayout
     private var flagCount = 0
     private var clickCount = 0
+
     val grid: List<Int> = listOf(
         10,14,14,14,6,
         11,15,15,15,7,
@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         change_button = findViewById(R.id.change_nickname)
         retry_button = findViewById(R.id.retry)
         you_win = findViewById(R.id.you_win)
-        gridBox = findViewById(R.id.gridBox)
 
         nickname.setOnClickListener {
             clickHandlerFunction()
@@ -59,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             resetBoard()
         }
         setListeners()
+        resetBoard()
     }
     private fun increaseBlack(){
         flagCount++
@@ -68,20 +68,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetBoard(){
+        click_count = findViewById(R.id.clickCount)
+        val clickPlaceholder = "No. of Clicks: 0"
+        click_count.text = clickPlaceholder
         for(i in (0..24)){
             gridColor[i] = 1
             findViewById<TextView>(getId()[i]).setBackgroundResource(R.color.defaultColor)
         }
         you_win.visibility = View.GONE
         retry_button.visibility = View.GONE
-        gridBox.visibility = View.VISIBLE
+        for(item in getId()){
+            findViewById<TextView>(item).setVisibility(View.VISIBLE)
+        }
+        flagCount = 0
+        clickCount = 0
+
     }
 
     private fun checkWinCondition(){
-        if(flagCount == 25){
+        if(flagCount >= 25){
             you_win.visibility = View.VISIBLE
             retry_button.visibility = View.VISIBLE
-            gridBox.visibility = View.GONE
+            for(item in getId()){
+                findViewById<TextView>(item).setVisibility(View.GONE)
+            }
+
         }
     }
 
